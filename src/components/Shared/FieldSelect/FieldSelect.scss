@@ -1,0 +1,52 @@
+@import '../../../sass/general.scss';
+
+.fieldSelect {
+    height: 50px;
+    width: 100%;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+
+    > div {
+        height: 100%;
+
+        .react-select__control {
+            cursor: text;
+            border: 1px solid $color-black-transparent-light;
+            height: 100%;
+
+            &:hover {
+                border: 1px solid $color-black-transparent-dark;
+            }
+
+            &.react-select__control--is-focused {
+                border-color: $color-blue;
+            }
+
+            .react-select__value-container {
+                padding: 0 10px;
+            }
+
+            .react-select__indicators {
+                cursor: pointer;
+            }
+        }
+
+        .react-select__option--is-focused {
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .react-select__option--is-selected {
+            cursor: pointer;
+            color: $color-black;
+            background-color: $color-blue-light;
+        }
+
+        .react-select__option--is-focused.react-select__option--is-selected {
+            cursor: pointer;
+            color: $color-black;
+            background-color: darken($color-blue-light, 5%);
+        }
+    }
+}

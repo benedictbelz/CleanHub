@@ -1,0 +1,44 @@
+@import '../../../sass/general.scss';
+
+.fieldCheckbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 50px;
+    width: 100%;
+
+    .labelLeft,
+    .labelRight {
+        cursor: pointer;
+    }
+
+    .checkboxWrapper {
+        cursor: pointer;
+        box-sizing: border-box;
+        position: relative;
+        height: 20px;
+        width: 36px;
+        border: 2px solid $color-black;
+        border-radius: 20px;
+
+        .checkboxDot {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            background-color: $color-black;
+            transition-duration: 300ms;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-delay: 0ms;
+            transition-property: left;
+        }
+
+        &.active {
+            .checkboxDot {
+                left: 18px;
+            }
+        }
+    }
+}
