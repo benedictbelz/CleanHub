@@ -14,6 +14,7 @@ export default function Hubs() {
     const [filterState, setFilterState] = useState<boolean>(false);
     const [filterSearch, setFilterSearch] = useState<string>('');
     const [filterSorting, setFilterSorting] = useState<string>('');
+    const [filterGroup, setFilterGroup] = useState<string>('');
 
     useEffect(() => {
         fetchHubs();
@@ -130,6 +131,27 @@ export default function Hubs() {
         );
     };
 
+    const renderGroup = (group: string) => {
+        if (group !== 'stage' && group !== 'state') {
+            return null;
+        }
+        const groups = _.uniq(_.map(hubs, item => item[`${group}`]));
+        return (
+            <div id='groups'>
+                {groups.map(element => {
+                    return (
+                        <div key={element} className='group'>
+                            <p>{_.startCase(_.toLower(element))}</p>
+                            <div className='list'>
+                                {hubs.filter(item => item[`${group}`] === element).map((item, index) => renderHub(item, index))}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        )
+    }
+
     const renderList = (hubs: ApiHub[] | null) => {
         // FILTER HUBS
         if (filterState) {
@@ -160,6 +182,9 @@ export default function Hubs() {
         if (filterSorting !== '') {
             hubs = _.orderBy(hubs, 'totalRecoveredQuantity', filterSorting as 'asc' | 'desc');
         }
+        if (filterGroup !== '') {
+            return renderGroup(filterGroup);
+        }
         // RENDER LIST
         if (error) {
             return <p>{error}</p>;
@@ -168,7 +193,7 @@ export default function Hubs() {
         } else if (hubs && hubs.length === 0) {
             return <p>There are currently no hubs available...</p>;
         } else {
-            return <div id='list'>{hubs.map((item, index) => renderHub(item, index))}</div>;
+            return <div className='list'>{hubs.map((item, index) => renderHub(item, index))}</div>;
         }
     };
 
@@ -181,6 +206,9 @@ export default function Hubs() {
         }
         if (_.get(params, 'field') === 'sorting' && typeof _.get(params, 'value') === 'string') {
             setFilterSorting(_.get(params, 'value', '') as string);
+        }
+        if (_.get(params, 'field') === 'group' && typeof _.get(params, 'value') === 'string') {
+            setFilterGroup(_.get(params, 'value', '') as string);
         }
     };
 
@@ -219,6 +247,26 @@ export default function Hubs() {
                     ]}
                     handleChange={value => setFilter({ field: 'sorting', value })}
                     value={filterSorting}
+                />
+                <FieldSelect
+                    ariaLabel='Group options for hubs'
+                    placeholder='Group by'
+                    options={[
+                        {
+                            value: '',
+                            label: 'None',
+                        },
+                        {
+                            value: 'stage',
+                            label: 'Stage',
+                        },
+                        {
+                            value: 'state',
+                            label: 'State',
+                        },
+                    ]}
+                    handleChange={value => setFilter({ field: 'group', value })}
+                    value={filterGroup}
                 />
             </div>
         );
